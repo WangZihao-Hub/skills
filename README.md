@@ -1,5 +1,9 @@
 # Claude Code Skills
 
+> **使用方法：** 将本仓库的所有技能文件夹直接放入 `~/.claude/skills/` 目录下即可使用。Claude Code 会自动加载该目录下的所有技能。
+
+# Claude Code Skills
+
 两个实用的 Claude Code 技能，用于学术论文深度解读和 PDF 文档处理。
 
 ## 技能列表
