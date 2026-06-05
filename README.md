@@ -20,6 +20,15 @@
 
 ## 技能列表
 
+### 🌐 publish-html-to-pages
+将本地 HTML 文件一键发布为 GitHub Pages 网页，自动重命名为 `index.html` 并推送到 GitHub。
+
+**使用示例：**
+```
+把这个 HTML 发布到 GitHub Pages
+将这个页面渲染为网页
+```
+
 ### 📄 paper-interpreter
 对学术论文进行 **12 维度深度结构化解读**，生成自包含的 HTML 报告（无外部依赖，浏览器直接打开）。
 
