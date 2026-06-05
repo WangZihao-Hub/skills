@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__PAPER_TITLE__</title>
+<style>
+  /* ============================================================
+     Paper Interpreter — Base Template Styles
+     自包含 · 无外部依赖 · 响应式 · 打印友好
+     ============================================================ */
+
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC",
+                 "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: #f5f6fa;
+    color: #2c3e50;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Header / Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, #0f1a30 0%, #1a2a4a 25%, #2c3e6b 55%, #4a6fa5 100%);
+    color: #fff;
+    padding: 64px 24px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+    font-weight: 800;
+    max-width: 920px;
+    margin: 0 auto 16px;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .meta {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .meta span { display: inline-block; margin: 4px 10px; }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 18px;
+    margin: 6px 4px;
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .badge a { color: #b8d4ff; text-decoration: none; }
+  .hero .badge a:hover { text-decoration: underline; }
+
+  /* ===== Navigation TOC ===== */
+  .toc {
+    background: #fff;
+    border-bottom: 1px solid #e2e6ed;
+    padding: 14px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .toc::-webkit-scrollbar { height: 4px; }
+  .toc::-webkit-scrollbar-thumb { background: #ccd4de; border-radius: 4px; }
+  .toc a {
+    display: inline-block;
+    color: #4a6fa5;
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    margin: 0 2px;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+  }
+  .toc a:hover { background: #eef2f7; color: #1a2a4a; }
+  .toc a:active { background: #dde4ed; }
+  .toc a .num {
+    display: inline-block;
+    width: 22px; height: 22px;
+    line-height: 22px;
+    text-align: center;
+    background: #4a6fa5;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  /* ===== Main Container ===== */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 36px 20px 80px;
+  }
+
+  /* ===== Section Cards ===== */
+  section {
+    background: #fff;
+    border-radius: 14px;
+    padding: 36px 40px;
+    margin-bottom: 26px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
+    border: 1px solid #eef0f5;
+    transition: box-shadow 0.3s;
+  }
+  section:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04); }
+  section h2 {
+    font-size: 1.4rem;
+    color: #1a2a4a;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 3px solid #eef0f5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: 0.02em;
+  }
+  section h2 .sec-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    min-width: 34px;
+    background: linear-gradient(135deg, #4a6fa5, #2c3e6b);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  section h3 {
+    font-size: 1.12rem;
+    color: #1a2a4a;
+    margin: 24px 0 12px;
+    font-weight: 700;
+  }
+  section h4 {
+    font-size: 1rem;
+    color: #2c3e6b;
+    margin: 16px 0 8px;
+    font-weight: 600;
+  }
+  section p { margin-bottom: 14px; }
+  section ul, section ol {
+    margin: 10px 0 18px 22px;
+  }
+  section li { margin-bottom: 8px; }
+
+  /* ===== Definition / Terminology ===== */
+  .def {
+    background: #f8fafc;
+    border: 1px solid #e4e9f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+  .def strong { color: #1a2a4a; }
+
+  /* ===== Blockquote ===== */
+  blockquote {
+    border-left: 4px solid #4a6fa5;
+    background: #f8fafc;
+    padding: 16px 22px;
+    margin: 18px 0;
+    border-radius: 0 10px 10px 0;
+    color: #5a6c7d;
+    font-style: italic;
+    position: relative;
+  }
+  blockquote::before {
+    content: "❝";
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    font-size: 1.4rem;
+    color: #4a6fa5;
+    opacity: 0.4;
+    font-style: normal;
+  }
+  blockquote strong { color: #2c3e6b; }
+
+  /* ===== Code blocks ===== */
+  pre {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 22px 26px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 18px 0;
+    font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "SF Mono",
+                 Consolas, "Liberation Mono", monospace;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    -webkit-overflow-scrolling: touch;
+  }
+  pre::-webkit-scrollbar { height: 6px; }
+  pre::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+  pre code { background: none; color: inherit; padding: 0; }
+  code { font-family: "JetBrains Mono", "Fira Code", Consolas, monospace; }
+  p code, li code, td code {
+    background: #eef2f7;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #c7254e;
+    white-space: nowrap;
+  }
+
+  /* ===== Math / Formula inline ===== */
+  .math {
+    font-family: "Georgia", "Times New Roman", serif;
+    font-style: italic;
+    color: #1a2a4a;
+    padding: 0 2px;
+  }
+
+  /* ===== Tables ===== */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 18px 0;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+    border: 1px solid #e4e9f0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 11px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e4e9f0;
+    vertical-align: top;
+  }
+  th {
+    background: #4a6fa5;
+    color: #fff;
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: #eef2f7; }
+  td.best {
+    font-weight: 700;
+    color: #1a6b3c;
+    background: #eafaf1 !important;
+  }
+  td.worst {
+    color: #c0392b;
+    background: #fef5f5 !important;
+  }
+
+  /* ===== Comparison Table (feature check) ===== */
+  .cmp-table th:first-child { min-width: 140px; }
+  .cmp-table .check { color: #27ae60; font-weight: 700; }
+  .cmp-table .cross { color: #c0392b; }
+  .cmp-table .partial { color: #f39c12; }
+  .cmp-table .self { background: #e8f0fa !important; }
+
+  /* ===== Flow Chart (pure CSS) ===== */
+  .flow-wrap {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 24px 16px;
+    margin: 22px 0;
+    border: 1px solid #e4e9f0;
+  }
+  .flow-wrap .flow-title {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #8899aa;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+  .flow .node {
+    background: linear-gradient(135deg, #4a6fa5, #2c3e6b);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(44,62,107,0.2);
+  }
+  .flow .node.input-node {
+    background: #27ae60;
+  }
+  .flow .node.output-node {
+    background: #e67e22;
+  }
+  .flow .node.light {
+    background: #e8edf5;
+    color: #2c3e6b;
+    box-shadow: none;
+  }
+  .flow .node.small {
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    border-radius: 8px;
+  }
+  .flow .arrow {
+    font-size: 1.5rem;
+    color: #4a6fa5;
+    margin: 0 10px;
+    font-weight: 700;
+  }
+  .flow .bracket {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .flow { flex-direction: column; gap: 4px; }
+    .flow .arrow { transform: rotate(90deg); margin: 2px 0; }
+    .flow .bracket { flex-direction: row; }
+  }
+
+  /* ===== Contribution Cards ===== */
+  .contrib-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    margin: 18px 0;
+  }
+  .contrib-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 22px 20px;
+    border: 1px solid #e8ecf1;
+    border-top: 5px solid #4a6fa5;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .contrib-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+  .contrib-card .contrib-icon {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+  .contrib-card h4 {
+    font-size: 0.95rem;
+    color: #1a2a4a;
+    margin: 0 0 8px 0;
+  }
+  .contrib-card p { font-size: 0.86rem; color: #5a6c7d; margin: 0; line-height: 1.6; }
+
+  /* ===== Big Metric Numbers ===== */
+  .metric-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 20px 0;
+    justify-content: center;
+  }
+  .metric-card {
+    flex: 1 1 160px;
+    max-width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    border: 2px solid #eef0f5;
+  }
+  .metric-card .metric-val {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2c3e6b;
+    line-height: 1.2;
+  }
+  .metric-card .metric-label {
+    font-size: 0.78rem;
+    color: #8899aa;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .metric-card .metric-delta {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .metric-card .metric-delta.up { color: #27ae60; }
+  .metric-card .metric-delta.down { color: #c0392b; }
+
+  /* ===== Bar Chart (pure CSS) ===== */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 28px;
+    height: 220px;
+    padding: 24px 0 12px;
+    border-bottom: 3px solid #dde2e8;
+    margin: 18px 0;
+  }
+  .bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 40px;
+  }
+  .bar-col .bar {
+    width: 52px;
+    background: linear-gradient(180deg, #4a6fa5 0%, #2c3e6b 100%);
+    border-radius: 8px 8px 0 0;
+    min-height: 8px;
+    transition: height 0.5s ease;
+    position: relative;
+  }
+  .bar-col .bar.highlight {
+    background: linear-gradient(180deg, #e67e22 0%, #d35400 100%);
+  }
+  .bar-col .bar.baseline {
+    background: linear-gradient(180deg, #b0bec5 0%, #78909c 100%);
+  }
+  .bar-col .label {
+    font-size: 0.72rem;
+    color: #5a6c7d;
+    margin-top: 10px;
+    text-align: center;
+    max-width: 80px;
+    word-break: break-all;
+  }
+  .bar-col .val {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #2c3e6b;
+    margin-bottom: 6px;
+  }
+
+  /* ===== Timeline ===== */
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 18px 0;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #4a6fa5, #dde2e8);
+    border-radius: 2px;
+  }
+  .timeline .tl-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 16px;
+  }
+  .timeline .tl-item::before {
+    content: "";
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 12px; height: 12px;
+    background: #4a6fa5;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #4a6fa5;
+  }
+  .timeline .tl-year {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4a6fa5;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+  .timeline .tl-text { font-size: 0.9rem; color: #5a6c7d; }
+
+  /* ===== Alert Boxes ===== */
+  .alert {
+    padding: 16px 22px;
+    border-radius: 10px;
+    margin: 18px 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .alert.info {
+    background: #e8f4fd;
+    border-left: 5px solid #4a6fa5;
+    color: #1a3a5c;
+  }
+  .alert.warning {
+    background: #fef9e7;
+    border-left: 5px solid #f39c12;
+    color: #6d4c00;
+  }
+  .alert.danger {
+    background: #fef0f0;
+    border-left: 5px solid #c0392b;
+    color: #5c1010;
+  }
+  .alert.success {
+    background: #eafaf1;
+    border-left: 5px solid #27ae60;
+    color: #1a4a2a;
+  }
+  .alert strong { display: block; margin-bottom: 4px; }
+
+  /* ===== Tags / Labels ===== */
+  .tag {
+    display: inline-block;
+    background: #e8edf5;
+    color: #4a6fa5;
+    padding: 4px 14px;
+    border-radius: 14px;
+    font-size: 0.8rem;
+    margin: 4px 5px;
+    font-weight: 500;
+  }
+  .tag.green { background: #d5f5e3; color: #1a6b3c; }
+  .tag.red { background: #fadbd8; color: #922b21; }
+  .tag.yellow { background: #fef9e7; color: #7d6608; }
+  .tag.blue { background: #d6eaf8; color: #1a5276; }
+
+  /* ===== Pro/Con Two-Column ===== */
+  .procon {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 18px 0;
+  }
+  .procon .pro, .procon .con {
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .procon .pro {
+    background: #eafaf1;
+    border: 1px solid #a3d9b1;
+  }
+  .procon .con {
+    background: #fef0f0;
+    border: 1px solid #f5b7b1;
+  }
+  .procon h4 { margin-top: 0; }
+  @media (max-width: 768px) {
+    .procon { grid-template-columns: 1fr; }
+  }
+
+  /* ===== Radar/Spider Alternative: Skill Bars ===== */
+  .skill-bars { margin: 18px 0; }
+  .skill-bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+  .skill-bar-row .skill-label {
+    width: 140px;
+    font-size: 0.85rem;
+    text-align: right;
+    color: #5a6c7d;
+    flex-shrink: 0;
+  }
+  .skill-bar-row .skill-track {
+    flex: 1;
+    height: 10px;
+    background: #e8ecf1;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .skill-bar-row .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2c3e6b, #4a6fa5);
+    border-radius: 6px;
+    transition: width 0.6s ease;
+  }
+  .skill-bar-row .skill-score {
+    width: 36px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #2c3e6b;
+  }
+  @media (max-width: 768px) {
+    .skill-bar-row .skill-label { width: 90px; font-size: 0.75rem; }
+  }
+
+  /* ===== Reference List ===== */
+  .ref-list { margin: 14px 0; }
+  .ref-item {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 3px solid #4a6fa5;
+    font-size: 0.9rem;
+  }
+  .ref-item .ref-idx {
+    display: inline-block;
+    width: 24px; height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background: #4a6fa5;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  .ref-item a { color: #4a6fa5; word-break: break-all; }
+
+  /* ===== Horizon Rule ===== */
+  hr {
+    border: none;
+    border-top: 1px solid #e4e9f0;
+    margin: 24px 0;
+  }
+
+  /* ===== Key Insight Highlight ===== */
+  .insight {
+    background: linear-gradient(135deg, #fffdf0, #fff9e0);
+    border: 2px solid #f0d060;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 18px 0;
+    position: relative;
+  }
+  .insight::before {
+    content: "💡 关键洞察";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #b8960c;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  /* ===== Section Divider Label ===== */
+  .section-label {
+    display: inline-block;
+    background: #2c3e6b;
+    color: #fff;
+    padding: 3px 14px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center;
+    color: #8899aa;
+    font-size: 0.82rem;
+    padding: 44px 20px;
+    border-top: 1px solid #e4e9f0;
+    margin-top: 40px;
+  }
+  footer p { margin-bottom: 4px; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .hero { padding: 44px 16px 36px; }
+    section { padding: 26px 20px; border-radius: 10px; }
+    .contrib-grid { grid-template-columns: 1fr; }
+    .toc { padding: 10px 14px; }
+    .toc a { font-size: 0.76rem; padding: 4px 10px; }
+    .bar-chart { gap: 14px; height: 180px; }
+    .bar-col .bar { width: 36px; }
+    .metric-row { flex-direction: column; align-items: center; }
+    .metric-card { max-width: 100%; }
+  }
+
+  /* ===== Print ===== */
+  @media print {
+    body { background: #fff; font-size: 13px; }
+    .toc { display: none; }
+    section {
+      box-shadow: none;
+      border: 1px solid #ccc;
+      break-inside: avoid;
+      margin-bottom: 12px;
+      padding: 18px 22px;
+    }
+    .hero {
+      background: #fff !important;
+      color: #000 !important;
+      padding: 24px 0;
+      border-bottom: 3px solid #000;
+    }
+    .hero::before, .hero::after { display: none; }
+    pre { background: #f5f5f5; color: #333; border: 1px solid #ccc; }
+    .alert { border: 1px solid #ccc; background: #fff; }
+    footer { border-top: 1px solid #ccc; }
+    a { color: #000; text-decoration: underline; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <h1>__PAPER_TITLE__</h1>
+  <div class="meta">
+    <span>👤 __PAPER_AUTHORS__</span>
+    <span>📅 __PAPER_YEAR__</span>
+  </div>
+  <div style="margin-top:12px;">
+    <span class="badge">📖 __PAPER_VENUE__</span>
+    __DOI_BADGE__
+    __LEVEL_BADGE__
+  </div>
+</header>
+
+<!-- ===== TOC ===== -->
+<nav class="toc">
+  <a href="#s1"><span class="num">1</span>元信息</a>
+  <a href="#s2"><span class="num">2</span>研究背景与动机</a>
+  <a href="#s3"><span class="num">3</span>核心问题/目标</a>
+  <a href="#s4"><span class="num">4</span>方法论/技术路线</a>
+  <a href="#s5"><span class="num">5</span>实验设计与结果</a>
+  <a href="#s6"><span class="num">6</span>主要贡献</a>
+  <a href="#s7"><span class="num">7</span>讨论与局限性</a>
+  <a href="#s8"><span class="num">8</span>未来工作建议</a>
+  <a href="#s9"><span class="num">9</span>批判性思考</a>
+  <a href="#s10"><span class="num">10</span>可视化总结</a>
+  <a href="#s11"><span class="num">11</span>相关资源</a>
+  <a href="#s12"><span class="num">12</span>可复现性提示</a>
+</nav>
+
+<main class="container">
+  <!-- 12 sections to be filled by the skill -->
+  __SECTIONS__
+</main>
+
+<footer>
+  <p>📄 由 <strong>Paper Interpreter</strong> 生成 · 基于对原论文的结构化深度解读</p>
+  <p>报告中包含批判性分析、合理推断与可视化总结，仅供学术研究讨论参考</p>
+  <p style="margin-top:6px; font-size:0.78rem;">生成时间：__GEN_TIME__</p>
+</footer>
+
+</body>
+</html>
