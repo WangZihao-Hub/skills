@@ -1,6 +1,18 @@
 # Claude Code Skills
 
 > **使用方法：** 将本仓库的所有技能文件夹直接放入 `~/.claude/skills/` 目录下即可使用。Claude Code 会自动加载该目录下的所有技能。
+>
+> ```
+> ~/.claude/
+> └── skills/              ← 本仓库（git clone 到这里）
+>     ├── skill1/
+>     │   ├── SKILL.md      ← 技能定义文件
+>     │   └── ...
+>     ├── skill2/
+>     │   ├── SKILL.md      ← 技能定义文件
+>     │   └── ...
+>     └── README.md
+> ```
 
 # Claude Code Skills
 
